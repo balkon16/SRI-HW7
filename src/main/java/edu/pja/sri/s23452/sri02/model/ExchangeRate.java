@@ -21,8 +21,6 @@ public class ExchangeRate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @NotNull(message = "Exchange rate must be present.")
     private Double exchangeRate;
     private String quoteCurrency;
     private String baseCurrency;
