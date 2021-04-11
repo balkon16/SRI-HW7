@@ -45,6 +45,15 @@ public class ExchangeRateController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/findByQuoteCurrency")
+    public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRatesByQuoteCurrency(@RequestParam String quoteCurrency){
+        List<ExchangeRate> allExchangeRates = exchangeRateRepository.findExchangeRateByQuoteCurrency(quoteCurrency);
+        List<ExchangeRateDto> result = allExchangeRates.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity saveNewExchangeRate(@RequestBody ExchangeRateDto dto){
         ExchangeRate entity = convertToEntity(dto);
@@ -83,10 +92,6 @@ public class ExchangeRateController {
         }  else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-
-
-        // TODO: obsłużyć org.springframework.dao.EmptyResultDataAccessException
-
     }
 }
 

@@ -11,4 +11,5 @@ import java.util.UUID;
 
 public interface ExchangeRateRepository extends CrudRepository<ExchangeRate, UUID> {
     List<ExchangeRate> findAll();
+    List<ExchangeRate> findExchangeRateByQuoteCurrency(String quoteCurrency);
 }
