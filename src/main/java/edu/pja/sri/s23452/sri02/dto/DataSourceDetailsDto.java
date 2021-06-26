@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Data
@@ -13,8 +14,17 @@ import java.util.Set;
 @Builder
 public class DataSourceDetailsDto {
     private Long id;
+
+    //TODO: takie same constraints jak w DataSourceDto
+
+    @NotBlank
     private String shortName;
+
+    @NotBlank
     private String fullName;
+
+    @NotBlank
     private String country;
+
     private Set<ExchangeRateDto> exchangeRates;
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -55,7 +56,7 @@ public class ExchangeRateController {
     }
 
     @PostMapping
-    public ResponseEntity saveNewExchangeRate(@RequestBody ExchangeRateDto dto){
+    public ResponseEntity saveNewExchangeRate(@Valid @RequestBody ExchangeRateDto dto){
         ExchangeRate entity = convertToEntity(dto);
         exchangeRateRepository.save(entity);
 
@@ -70,6 +71,7 @@ public class ExchangeRateController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
+    // TODO: dodać walidację -> @Valid
     @PutMapping("/{exchangeRateId}")
     public ResponseEntity updateExchangeRate(@PathVariable UUID exchangeRateId, @RequestBody ExchangeRateDto exchangeRateDto){
         Optional<ExchangeRate> currentExchangeRate = exchangeRateRepository.findById(exchangeRateId);

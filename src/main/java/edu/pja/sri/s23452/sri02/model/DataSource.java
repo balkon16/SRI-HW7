@@ -13,6 +13,8 @@ import java.util.Set;
 @Builder
 public class DataSource {
 
+    // TODO: walidacja musi również znajdować się w tej klasie -> skopiować z DataSourceDto
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
