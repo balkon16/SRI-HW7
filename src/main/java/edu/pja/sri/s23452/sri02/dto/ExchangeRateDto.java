@@ -23,5 +23,4 @@ public class ExchangeRateDto {
     @DateTimeFormat(pattern = "yyyy-dd-MMTHH:mm:ss")
     private LocalDateTime observationDateTime;
     private int multiplier;
-    private String source;
 }
