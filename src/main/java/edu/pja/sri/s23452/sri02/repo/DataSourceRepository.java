@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface DataSourceRepository extends CrudRepository<DataSource, Long> {
     List<DataSource> findAll();
 
-    // pobieranie zależnych obiektów
     @Query("FROM DataSource AS ds LEFT JOIN FETCH ds.exchangeRates WHERE ds.id=:dataSourceId")
     Optional<DataSource> getDataSourceDetailsById(@Param("dataSourceId") Long dataSourceId);
 

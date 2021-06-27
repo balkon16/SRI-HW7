@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Data
@@ -15,15 +17,15 @@ import java.util.Set;
 public class DataSourceDetailsDto {
     private Long id;
 
-    //TODO: takie same constraints jak w DataSourceDto
-
-    @NotBlank
+    @NotBlank(message = "shortName is mandatory")
+    @Size(max = 10, message = "maximum length for shortName is 10 characters")
     private String shortName;
 
-    @NotBlank
+    @NotBlank(message = "fullName is mandatory")
     private String fullName;
 
-    @NotBlank
+    @NotBlank(message = "country is mandatory")
+    @Pattern(regexp = "[A-Z]{2}", message = "country is two capital letters")
     private String country;
 
     private Set<ExchangeRateDto> exchangeRates;

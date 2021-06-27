@@ -29,6 +29,7 @@ public class ExchangeRateController {
         this.modelMapper = modelMapper;
     }
 
+    // TODO: metody convert* przenieść do ExchangeRteDtoMapper
     private ExchangeRateDto convertToDto(ExchangeRate e){
         return modelMapper.map(e, ExchangeRateDto.class);
     }
