@@ -5,7 +5,6 @@ import edu.pja.sri.s23452.sri02.dto.mapper.ExchangeRateDtoMapper;
 import edu.pja.sri.s23452.sri02.model.ExchangeRate;
 import edu.pja.sri.s23452.sri02.repo.ExchangeRateRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +28,7 @@ public class ExchangeRateController {
 
     @GetMapping
     public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRates(){
+        // TODO: dodać link self
         List<ExchangeRate> allExchangeRates = exchangeRateRepository.findAll();
         List<ExchangeRateDto> result = allExchangeRates.stream()
                 .map(exchangeRateDtoMapper::convertToDto)
@@ -38,6 +38,7 @@ public class ExchangeRateController {
 
     @GetMapping("/findByQuoteCurrency")
     public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRatesByQuoteCurrency(@RequestParam String quoteCurrency){
+        // TODO: dodać link self
         List<ExchangeRate> allExchangeRates = exchangeRateRepository.findExchangeRateByQuoteCurrency(quoteCurrency);
         List<ExchangeRateDto> result = allExchangeRates.stream()
                 .map(exchangeRateDtoMapper::convertToDto)
@@ -47,6 +48,7 @@ public class ExchangeRateController {
 
     @PostMapping
     public ResponseEntity saveNewExchangeRate(@Valid @RequestBody ExchangeRateDto dto){
+        // TODO: dodać link self
         ExchangeRate entity = exchangeRateDtoMapper.convertToEntity(dto);
         exchangeRateRepository.save(entity);
 
@@ -64,6 +66,7 @@ public class ExchangeRateController {
     @PutMapping("/{exchangeRateId}")
     public ResponseEntity updateExchangeRate(@PathVariable UUID exchangeRateId,
                                              @Valid @RequestBody ExchangeRateDto exchangeRateDto){
+        // TODO: dodać link self
         Optional<ExchangeRate> currentExchangeRate = exchangeRateRepository.findById(exchangeRateId);
         if(currentExchangeRate.isPresent()){
             exchangeRateDto.setId(exchangeRateId);
@@ -77,6 +80,7 @@ public class ExchangeRateController {
 
     @DeleteMapping("/{exchangeRateId}")
     public ResponseEntity deleteExchangeRate(@PathVariable UUID exchangeRateId){
+        // TODO: dodać link self
         Optional<ExchangeRate> currentExchangeRate = exchangeRateRepository.findById(exchangeRateId);
         if (currentExchangeRate.isPresent()){
             exchangeRateRepository.deleteById(exchangeRateId);

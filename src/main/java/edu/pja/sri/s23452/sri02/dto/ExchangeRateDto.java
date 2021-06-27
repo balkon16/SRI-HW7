@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
@@ -13,15 +14,13 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExchangeRateDto {
+public class ExchangeRateDto extends RepresentationModel<ExchangeRateDto> {
 
     private UUID id;
-
 
     @NotNull(message = "exchangeRate is mandatory")
     @DecimalMin(value = "0.0", message = "exchangeRate cannot be negative")
     private Double exchangeRate;
-
 
     @NotBlank(message = "quoteCurrency is mandatory")
     @Pattern(regexp = "[A-Z]{3}", message = "quoteCurrency should be three capital letters")

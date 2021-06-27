@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class DataSourceDetailsDto {
+public class DataSourceDetailsDto extends RepresentationModel<DataSourceDetailsDto> {
     private Long id;
 
     @NotBlank(message = "shortName is mandatory")
