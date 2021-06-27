@@ -61,10 +61,9 @@ public class ExchangeRateController {
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
-    // TODO: dodać walidację -> @Valid
-    // TODO: sprawdzić czy działa walidacja
     @PutMapping("/{exchangeRateId}")
-    public ResponseEntity updateExchangeRate(@PathVariable UUID exchangeRateId, @RequestBody ExchangeRateDto exchangeRateDto){
+    public ResponseEntity updateExchangeRate(@PathVariable UUID exchangeRateId,
+                                             @Valid @RequestBody ExchangeRateDto exchangeRateDto){
         Optional<ExchangeRate> currentExchangeRate = exchangeRateRepository.findById(exchangeRateId);
         if(currentExchangeRate.isPresent()){
             exchangeRateDto.setId(exchangeRateId);
