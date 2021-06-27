@@ -18,7 +18,8 @@ import java.util.UUID;
 public class ExchangeRate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+// commented out for the purposes of reproducibility:
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
 
