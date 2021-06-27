@@ -1,8 +1,10 @@
 package edu.pja.sri.s23452.sri02.rest;
 
 import edu.pja.sri.s23452.sri02.dto.ExchangeRateDto;
+import edu.pja.sri.s23452.sri02.dto.mapper.ExchangeRateDtoMapper;
 import edu.pja.sri.s23452.sri02.model.ExchangeRate;
 import edu.pja.sri.s23452.sri02.repo.ExchangeRateRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,29 +22,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/exchangeRates")
+@RequiredArgsConstructor
 public class ExchangeRateController {
-    private ExchangeRateRepository exchangeRateRepository;
-    private ModelMapper modelMapper;
-
-    public ExchangeRateController(ExchangeRateRepository exchangeRateRepository, ModelMapper modelMapper){
-        this.exchangeRateRepository = exchangeRateRepository;
-        this.modelMapper = modelMapper;
-    }
-
-    // TODO: metody convert* przenieść do ExchangeRteDtoMapper
-    private ExchangeRateDto convertToDto(ExchangeRate e){
-        return modelMapper.map(e, ExchangeRateDto.class);
-    }
-
-    private ExchangeRate convertToEntity(ExchangeRateDto dto){
-        return modelMapper.map(dto, ExchangeRate.class);
-    }
+    private final ExchangeRateRepository exchangeRateRepository;
+    private final ExchangeRateDtoMapper exchangeRateDtoMapper;
 
     @GetMapping
     public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRates(){
         List<ExchangeRate> allExchangeRates = exchangeRateRepository.findAll();
         List<ExchangeRateDto> result = allExchangeRates.stream()
-                .map(this::convertToDto)
+                .map(exchangeRateDtoMapper::convertToDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -51,14 +40,14 @@ public class ExchangeRateController {
     public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRatesByQuoteCurrency(@RequestParam String quoteCurrency){
         List<ExchangeRate> allExchangeRates = exchangeRateRepository.findExchangeRateByQuoteCurrency(quoteCurrency);
         List<ExchangeRateDto> result = allExchangeRates.stream()
-                .map(this::convertToDto)
+                .map(exchangeRateDtoMapper::convertToDto)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity saveNewExchangeRate(@Valid @RequestBody ExchangeRateDto dto){
-        ExchangeRate entity = convertToEntity(dto);
+        ExchangeRate entity = exchangeRateDtoMapper.convertToEntity(dto);
         exchangeRateRepository.save(entity);
 
         HttpHeaders headers = new HttpHeaders();
@@ -73,12 +62,13 @@ public class ExchangeRateController {
     }
 
     // TODO: dodać walidację -> @Valid
+    // TODO: sprawdzić czy działa walidacja
     @PutMapping("/{exchangeRateId}")
     public ResponseEntity updateExchangeRate(@PathVariable UUID exchangeRateId, @RequestBody ExchangeRateDto exchangeRateDto){
         Optional<ExchangeRate> currentExchangeRate = exchangeRateRepository.findById(exchangeRateId);
         if(currentExchangeRate.isPresent()){
             exchangeRateDto.setId(exchangeRateId);
-            ExchangeRate entity = convertToEntity(exchangeRateDto);
+            ExchangeRate entity = exchangeRateDtoMapper.convertToEntity(exchangeRateDto);
             exchangeRateRepository.save(entity);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         } else {
