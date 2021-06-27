@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,5 +29,6 @@ public class DataSourceDetailsDto {
     @Pattern(regexp = "[A-Z]{2}", message = "country is two capital letters")
     private String country;
 
+    @Valid
     private Set<ExchangeRateDto> exchangeRates;
 }

@@ -19,10 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -167,5 +164,36 @@ public class DataSourceController {
         } else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/fullInsert")
+    public ResponseEntity addNewDataSourceWithExchangeRates(@Valid @RequestBody DataSourceDetailsDto dto) {
+        DataSource dataSourceEntity = dataSourceDtoMapper.convertToEntityDetails(dto);
+        dataSourceRepository.save(dataSourceEntity);
+
+        URI location = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(dataSourceEntity.getId())
+            .toUri();
+
+        List<URI> exchangeRateUris = new ArrayList<>();
+        for (ExchangeRateDto exchangeRateDto : dto.getExchangeRates()) {
+            ExchangeRate exchangeRateEntity = exchangeRateDtoMapper.convertToEntity(exchangeRateDto);
+            exchangeRateEntity.setSource(dataSourceEntity);
+            exchangeRateRepository.save(exchangeRateEntity);
+            URI exchangeRateUri = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(exchangeRateEntity.getId())
+                    .toUri();
+            exchangeRateUris.add(exchangeRateUri);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location - data source", location.toString());
+        headers.add("Location - exchange rates", exchangeRateUris.toString());
+        return new ResponseEntity(headers, HttpStatus.CREATED);
+
     }
 }

@@ -24,6 +24,10 @@ public class DataSourceDtoMapper {
         return modelMapper.map(dto, DataSource.class);
     }
 
+    public DataSource convertToEntityDetails(DataSourceDetailsDto dto) {
+        return modelMapper.map(dto, DataSource.class);
+    }
+
     // Jeżeli będziesz tworzył za jednym zamachem
     // DataSource z kursami musisz mieć metodę convertToEntityDetails
 }
