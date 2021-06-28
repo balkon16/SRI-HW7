@@ -10,7 +10,9 @@ import edu.pja.sri.s23452.sri02.model.ExchangeRate;
 import edu.pja.sri.s23452.sri02.repo.DataSourceRepository;
 import edu.pja.sri.s23452.sri02.repo.ExchangeRateRepository;
 
+import edu.pja.sri.s23452.sri02.rest.Hateoas.HateoasLinkGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,40 +34,43 @@ public class DataSourceController {
     private final DataSourceDtoMapper dataSourceDtoMapper;
     private final ExchangeRateDtoMapper exchangeRateDtoMapper;
 
-    @GetMapping
-    public ResponseEntity<Collection<DataSourceDto>> getDataSources() {
-        // TODO: dodać link self
+    @GetMapping(produces = {"application/hal+json"})
+    public ResponseEntity<CollectionModel<DataSourceDto>> getDataSources() {
         List<DataSource> allDataSources = dataSourceRepository.findAll();
         List<DataSourceDto> result = allDataSources.stream()
                 .map(dataSourceDtoMapper::convertToDto)
                 .collect(Collectors.toList());
 
         for (DataSourceDto dto : result) {
-            dto.add(createDataSourceSelfLink(dto.getId()));
-            // TODO: link do Exchange Rates
+            dto.add(HateoasLinkGenerator.createDataSourceSelfLink(dto.getId()));
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        Link linkSelf = linkTo(methodOn(DataSourceController.class).getDataSources()).withSelfRel();
+        CollectionModel<DataSourceDto> resWithLink = CollectionModel.of(result, linkSelf);
+
+        return new ResponseEntity<>(resWithLink, HttpStatus.OK);
     }
 
-    @GetMapping("/{dataSourceId}")
+    @GetMapping(path = "/{dataSourceId}", produces = {"application/hal+json"})
     public ResponseEntity<DataSourceDetailsDto> getDataSourceById(@PathVariable Long dataSourceId) {
         Optional<DataSource> dataSource = dataSourceRepository.findById(dataSourceId);
         if (dataSource.isPresent()) {
             DataSourceDetailsDto dto = dataSourceDtoMapper.convertToDtoDetails(dataSource.get());
-            dto.add(createDataSourceSelfLink(dataSourceId));
+            // TODO: dodać selfLink do powiązanych zasobów
+            dto.add(HateoasLinkGenerator.createDataSourceSelfLink(dataSourceId));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/shortName/{shortName}")
+    @GetMapping(path = "/shortName/{shortName}", produces = { "application/hal+json" })
     public ResponseEntity<DataSourceDetailsDto> getDataSourceByShortName(@PathVariable String shortName) {
-        // TODO: dodać link self
         Optional<DataSource> dataSource = dataSourceRepository.getDataSourceDetailsByShortName(shortName);
         if (dataSource.isPresent()) {
             DataSourceDetailsDto dto = dataSourceDtoMapper.convertToDtoDetails(dataSource.get());
+            dto.add(HateoasLinkGenerator.createDataSourceSelfLink(shortName));
+            // TODO: dodać selfLink do powiązanych zasobów
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -74,7 +79,6 @@ public class DataSourceController {
 
     @PostMapping
     public ResponseEntity addNewDataSource(@Valid @RequestBody DataSourceDto dto) {
-        // TODO: dodać link self
         DataSource entity = dataSourceDtoMapper.convertToEntity(dto);
         dataSourceRepository.save(entity);
 
@@ -92,7 +96,6 @@ public class DataSourceController {
 
     @PutMapping("/{dataSourceId}")
     public ResponseEntity updateDataSource(@PathVariable Long dataSourceId, @Valid @RequestBody DataSourceDto dto) {
-        // TODO: dodać link self
         Optional<DataSource> currentDataSource = dataSourceRepository.findById(dataSourceId);
         if (currentDataSource.isPresent()) {
             dto.setId(dataSourceId);
@@ -105,9 +108,8 @@ public class DataSourceController {
     }
 
 
-   @DeleteMapping("/{dataSourceId}")
+    @DeleteMapping("/{dataSourceId}")
     public ResponseEntity deleteDataSourceWithDetails(@PathVariable Long dataSourceId) {
-       // TODO: dodać link self
         Optional<DataSource> currentDataSource = dataSourceRepository.findById(dataSourceId);
         if (currentDataSource.isPresent()) {
 
@@ -122,21 +124,27 @@ public class DataSourceController {
         }
     }
 
-    @GetMapping("/{dataSourceId}/exchangeRates")
+    @GetMapping(path = "/{dataSourceId}/exchangeRates", produces = {"application/hal+json"})
     public ResponseEntity getExchangeRatesByDataSource(@PathVariable Long dataSourceId) {
-        // TODO: dodać link self
         List<ExchangeRate> exchangeRates = exchangeRateRepository.findExchangeRateByDataSourceId(dataSourceId);
         List<ExchangeRateDto> result = exchangeRates.stream()
                 .map(exchangeRateDtoMapper::convertToDto)
                 .collect(Collectors.toList());
-        return new ResponseEntity(result, HttpStatus.OK);
+
+        for (ExchangeRateDto dto : result) {
+            dto.add(HateoasLinkGenerator.createExchangeRateSelfLink(dto.getId()));
+        }
+
+        Link linkSelf = linkTo(methodOn(DataSourceController.class).getExchangeRatesByDataSource(dataSourceId)).withSelfRel();
+        CollectionModel<ExchangeRateDto> resWithLink = CollectionModel.of(result, linkSelf);
+
+        return new ResponseEntity<>(resWithLink, HttpStatus.OK);
     }
 
 
     @PostMapping("/{dataSourceId}/exchangeRates/{exchangeRateId}")
     public ResponseEntity associateExchangeRateWithDataSource(@PathVariable Long dataSourceId,
                                                               @PathVariable UUID exchangeRateId) {
-        // TODO: dodać link self
         Optional<ExchangeRate> exchangeRateOptional = exchangeRateRepository.findById(exchangeRateId);
         Optional<DataSource> dataSourceOptional = dataSourceRepository.findById(dataSourceId);
 
@@ -162,8 +170,7 @@ public class DataSourceController {
 
     @DeleteMapping("/{dataSourceId}/exchangeRates/{exchangeRateId}")
     public ResponseEntity removeExchangeRateAndDataSourceAssociation(@PathVariable Long dataSourceId,
-                                                                     @PathVariable UUID exchangeRateId){
-        // TODO: dodać link self
+                                                                     @PathVariable UUID exchangeRateId) {
         Optional<ExchangeRate> exchangeRateOptional = exchangeRateRepository.findById(exchangeRateId);
         Optional<DataSource> dataSourceOptional = dataSourceRepository.findById(dataSourceId);
 
@@ -184,15 +191,14 @@ public class DataSourceController {
 
     @PostMapping("/fullInsert")
     public ResponseEntity addNewDataSourceWithExchangeRates(@Valid @RequestBody DataSourceDetailsDto dto) {
-        // TODO: dodać link self
         DataSource dataSourceEntity = dataSourceDtoMapper.convertToEntityDetails(dto);
         dataSourceRepository.save(dataSourceEntity);
 
         URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(dataSourceEntity.getId())
-            .toUri();
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(dataSourceEntity.getId())
+                .toUri();
 
         List<URI> exchangeRateUris = new ArrayList<>();
         for (ExchangeRateDto exchangeRateDto : dto.getExchangeRates()) {
@@ -214,7 +220,4 @@ public class DataSourceController {
 
     }
 
-    private Link createDataSourceSelfLink(Long dataSourceId) {
-        return linkTo(methodOn(DataSourceController.class).getDataSourceById(dataSourceId)).withSelfRel();
-    }
 }
