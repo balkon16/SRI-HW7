@@ -6,6 +6,8 @@ import edu.pja.sri.s23452.sri02.model.ExchangeRate;
 import edu.pja.sri.s23452.sri02.repo.ExchangeRateRepository;
 import edu.pja.sri.s23452.sri02.rest.Hateoas.HateoasLinkGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +16,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/exchangeRates")
@@ -27,37 +31,52 @@ public class ExchangeRateController {
     private final ExchangeRateRepository exchangeRateRepository;
     private final ExchangeRateDtoMapper exchangeRateDtoMapper;
 
-    @GetMapping(path = "/exchangeRates/{exchangeRateId}", produces = { "application/hal+json" })
+    @GetMapping(path = "/{exchangeRateId}", produces = { "application/hal+json" })
     public ResponseEntity<ExchangeRateDto> getExchangeRateById(@PathVariable UUID exchangeRateId) {
         Optional<ExchangeRate> exchangeRate = exchangeRateRepository.findById(exchangeRateId);
         if (exchangeRate.isPresent()) {
-            // TODO: dodać selfLink
             ExchangeRateDto dto = exchangeRateDtoMapper.convertToDto(exchangeRate.get());
-            dto.add(HateoasLinkGenerator.createExchangeRateSelfLink(dto.getId()));
+            dto.add(HateoasLinkGenerator.createExchangeRateByIdSelfLink(dto.getId()));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping
-    public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRates(){
-        // TODO: dodać link self
+    @GetMapping(produces = { "application/hal+json" })
+    public ResponseEntity<CollectionModel<ExchangeRateDto>> getExchangeRates(){
         List<ExchangeRate> allExchangeRates = exchangeRateRepository.findAll();
         List<ExchangeRateDto> result = allExchangeRates.stream()
                 .map(exchangeRateDtoMapper::convertToDto)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+
+        for (ExchangeRateDto dto : result) {
+            dto.add(HateoasLinkGenerator.createExchangeRateByIdSelfLink(dto.getId()));
+        }
+
+        Link linkSelf = linkTo(methodOn(ExchangeRateController.class).getExchangeRates()).withSelfRel();
+        CollectionModel<ExchangeRateDto> resWithLink = CollectionModel.of(result, linkSelf);
+
+        return new ResponseEntity<>(resWithLink, HttpStatus.OK);
     }
 
-    @GetMapping("/findByQuoteCurrency")
-    public ResponseEntity<Collection<ExchangeRateDto>> getExchangeRatesByQuoteCurrency(@RequestParam String quoteCurrency){
-        // TODO: dodać link self
+    @GetMapping(path = "/findByQuoteCurrency", produces = { "application/hal+json" })
+    public ResponseEntity<CollectionModel<ExchangeRateDto>> getExchangeRatesByQuoteCurrency(@RequestParam String quoteCurrency){
         List<ExchangeRate> allExchangeRates = exchangeRateRepository.findExchangeRateByQuoteCurrency(quoteCurrency);
         List<ExchangeRateDto> result = allExchangeRates.stream()
                 .map(exchangeRateDtoMapper::convertToDto)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+
+        for (ExchangeRateDto dto : result) {
+            dto.add(HateoasLinkGenerator.createExchangeRateByIdSelfLink(dto.getId()));
+        }
+
+        Link linkSelf = linkTo(methodOn(ExchangeRateController.class).
+                getExchangeRatesByQuoteCurrency(quoteCurrency)).
+                withSelfRel();
+        CollectionModel<ExchangeRateDto> resWithLink = CollectionModel.of(result, linkSelf);
+
+        return new ResponseEntity<>(resWithLink, HttpStatus.OK);
     }
 
     @PostMapping

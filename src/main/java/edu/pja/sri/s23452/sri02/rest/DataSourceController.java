@@ -56,7 +56,12 @@ public class DataSourceController {
         Optional<DataSource> dataSource = dataSourceRepository.findById(dataSourceId);
         if (dataSource.isPresent()) {
             DataSourceDetailsDto dto = dataSourceDtoMapper.convertToDtoDetails(dataSource.get());
-            // TODO: dodać selfLink do powiązanych zasobów
+
+            Set<ExchangeRateDto> res = dto.getExchangeRates().stream()
+                    .map(HateoasLinkGenerator::addSelfLinkToExchangeRateDto)
+                    .collect(Collectors.toSet());
+            dto.setExchangeRates(res);
+
             dto.add(HateoasLinkGenerator.createDataSourceSelfLink(dataSourceId));
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
@@ -69,8 +74,14 @@ public class DataSourceController {
         Optional<DataSource> dataSource = dataSourceRepository.getDataSourceDetailsByShortName(shortName);
         if (dataSource.isPresent()) {
             DataSourceDetailsDto dto = dataSourceDtoMapper.convertToDtoDetails(dataSource.get());
+
+            Set<ExchangeRateDto> res = dto.getExchangeRates().stream()
+                    .map(HateoasLinkGenerator::addSelfLinkToExchangeRateDto)
+                    .collect(Collectors.toSet());
+            dto.setExchangeRates(res);
+
             dto.add(HateoasLinkGenerator.createDataSourceSelfLink(shortName));
-            // TODO: dodać selfLink do powiązanych zasobów
+
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -132,7 +143,7 @@ public class DataSourceController {
                 .collect(Collectors.toList());
 
         for (ExchangeRateDto dto : result) {
-            dto.add(HateoasLinkGenerator.createExchangeRateSelfLink(dto.getId()));
+            dto.add(HateoasLinkGenerator.createExchangeRateByIdSelfLink(dto.getId()));
         }
 
         Link linkSelf = linkTo(methodOn(DataSourceController.class).getExchangeRatesByDataSource(dataSourceId)).withSelfRel();
