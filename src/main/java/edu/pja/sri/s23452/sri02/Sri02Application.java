@@ -19,3 +19,5 @@ public class Sri02Application {
     }
 
 }
+
+// TODO: Describe endpoints listed in the Postman collection.
