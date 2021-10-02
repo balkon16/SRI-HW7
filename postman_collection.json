@@ -1,0 +1,712 @@
+{
+	"info": {
+		"_postman_id": "3858febb-860a-487e-acc4-8e57fbaf4397",
+		"name": "SRI-PD7-rozwiazanie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ExchangeRates",
+			"item": [
+				{
+					"name": "Errors",
+					"item": [
+						{
+							"name": "Add new exchange rate - multiplier is 0",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"exchangeRate\": 4.5191,\n    \"quoteCurrency\": \"PLN\",\n    \"baseCurrency\": \"EUR\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/exchangeRates",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"exchangeRates"
+									]
+								},
+								"description": "Add new description - all mandatory fields are present in the body."
+							},
+							"response": []
+						},
+						{
+							"name": "Add new exchange rate - baseCurrency invalid format",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"exchangeRate\": 4.5191,\n    \"quoteCurrency\": \"złoty\",\n    \"baseCurrency\": \"EUR\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/exchangeRates",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"exchangeRates"
+									]
+								},
+								"description": "Add new description - all mandatory fields are present in the body."
+							},
+							"response": []
+						},
+						{
+							"name": "Add new exchange rate - exchangeRate not valid",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"exchangeRate\": -2.51,\n    \"quoteCurrency\": \"PLN\",\n    \"baseCurrency\": \"EUR\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/exchangeRates",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"exchangeRates"
+									]
+								},
+								"description": "ExchangeRate can't be negative or zero."
+							},
+							"response": []
+						},
+						{
+							"name": "Add new exchange rate - quoteCurrency missing",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"exchangeRate\": 4.5191,\n    \"baseCurrency\": \"EUR\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/exchangeRates",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"exchangeRates"
+									]
+								},
+								"description": "quoteCurrency is a mandatory field."
+							},
+							"response": []
+						},
+						{
+							"name": "Update exchange rate - invalid baseCurrency",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"exchangeRate\": 0.331,\n    \"quoteCurrency\": \"PLN\",\n    \"baseCurrency\": \"juro\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/exchangeRates/9b52d40d-f0f2-4878-99a5-26f79090d93b",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"exchangeRates",
+										"9b52d40d-f0f2-4878-99a5-26f79090d93b"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add new exchange rate - correct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"exchangeRate\": 4.5191,\n    \"quoteCurrency\": \"PLN\",\n    \"baseCurrency\": \"EUR\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/exchangeRates",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"exchangeRates"
+							]
+						},
+						"description": "Add new description - all mandatory fields are present in the body."
+					},
+					"response": []
+				},
+				{
+					"name": "Update exchange rate - correct",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"exchangeRate\": 0.331,\n    \"quoteCurrency\": \"PLN\",\n    \"baseCurrency\": \"EUR\",\n    \"observationDateTime\": \"2019-04-08T12:30:56\",\n    \"multiplier\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/exchangeRates/9b52d40d-f0f2-4878-99a5-26f79090d93b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"exchangeRates",
+								"9b52d40d-f0f2-4878-99a5-26f79090d93b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get exchange rates by data source",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/1/exchangeRates",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"1",
+								"exchangeRates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get exchange rate by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/exchangeRates/4e344733-f835-4832-a01b-b929d01af28d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"exchangeRates",
+								"4e344733-f835-4832-a01b-b929d01af28d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get exchange rates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/exchangeRates",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"exchangeRates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get exchange rate by quote currency",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/exchangeRates/findByQuoteCurrency?quoteCurrency=PLN",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"exchangeRates",
+								"findByQuoteCurrency"
+							],
+							"query": [
+								{
+									"key": "quoteCurrency",
+									"value": "PLN"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DataSources",
+			"item": [
+				{
+					"name": "Errors",
+					"item": [
+						{
+							"name": "Add new data source (w/o details) - invalid country",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"country\": \"Germany\",\n    \"shortName\": \"BBk\",\n    \"fullName\": \"Deutsche Bundesbank\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/dataSources",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"dataSources"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new data source (w/o details) - invalid shortName",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"country\": \"DE\",\n    \"shortName\": \"deutsche_bundesbank\",\n    \"fullName\": \"Deutsche Bundesbank\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/dataSources",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"dataSources"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update data source - invalid country",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"country\": \"Lechistan\",\n    \"shortName\": \"NBP\",\n    \"fullName\": \"Narodowy Bank Polski\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/dataSources/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"dataSources",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate exchange rate with data source  - association already exists",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/dataSources/1/exchangeRates/4e344733-f835-4832-a01b-b929d01af28d",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"dataSources",
+										"1",
+										"exchangeRates",
+										"4e344733-f835-4832-a01b-b929d01af28d"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate exchange rate with data source - source doesn't exist",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8081/api/dataSources/55/exchangeRates/4342f3f8-d0b1-4343-bca6-8d4d44616215",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"dataSources",
+										"55",
+										"exchangeRates",
+										"4342f3f8-d0b1-4343-bca6-8d4d44616215"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add new data source (wIth details) - invalid exchange rate",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"country\": \"CH\",\n  \"shortName\": \"PBC\",\n  \"fullName\": \"中国人民银行\",\n  \"exchangeRates\": [\n    {\n      \"id\": \"f9684087-735e-4303-bc08-60fc55e97af5\",\n      \"exchangeRate\": 17.16,\n      \"quoteCurrency\": \"YEN\",\n      \"baseCurrency\": \"RMB\",\n      \"observationDateTime\": \"2021-06-27T14:57:27.408573\",\n      \"multiplier\": 1\n    },\n    {\n      \"id\": \"c2389ab6-172d-4af8-a2b3-ac9485b68a91\",\n      \"exchangeRate\": -999999.1,\n      \"quoteCurrency\": \"WON\",\n      \"baseCurrency\": \"Renminbi\",\n      \"observationDateTime\": \"2021-06-27T14:57:27.408573\",\n      \"multiplier\": 1\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8081/api/dataSources/fullInsert",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8081",
+									"path": [
+										"api",
+										"dataSources",
+										"fullInsert"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all data sources (w/o details)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get data source (with details)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get data source by shortName (with details)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/shortName/NBP",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"shortName",
+								"NBP"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new data source (w/o details)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"DE\",\n    \"shortName\": \"BBk\",\n    \"fullName\": \"Deutsche Bundesbank\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new data source (wIth details)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"country\": \"CH\",\n  \"shortName\": \"PBC\",\n  \"fullName\": \"中国人民银行\",\n  \"exchangeRates\": [\n    {\n      \"id\": \"f9684087-735e-4303-bc08-60fc55e97af5\",\n      \"exchangeRate\": 17.16,\n      \"quoteCurrency\": \"YEN\",\n      \"baseCurrency\": \"RMB\",\n      \"observationDateTime\": \"2021-06-27T14:57:27.408573\",\n      \"multiplier\": 1\n    },\n    {\n      \"id\": \"c2389ab6-172d-4af8-a2b3-ac9485b68a91\",\n      \"exchangeRate\": 174.61,\n      \"quoteCurrency\": \"WON\",\n      \"baseCurrency\": \"RMB\",\n      \"observationDateTime\": \"2021-06-27T14:57:27.408573\",\n      \"multiplier\": 1\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/fullInsert",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"fullInsert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update data source",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"country\": \"PL\",\n    \"shortName\": \"NBP\",\n    \"fullName\": \"Nasz Bank Polski\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete data source (with details)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Associate exchange rate with data source",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/1/exchangeRates/4342f3f8-d0b1-4343-bca6-8d4d44616215",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"1",
+								"exchangeRates",
+								"4342f3f8-d0b1-4343-bca6-8d4d44616215"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove association",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/dataSources/2/exchangeRates/c2a70783-8738-4041-9456-8d65e5be2179",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"dataSources",
+								"2",
+								"exchangeRates",
+								"c2a70783-8738-4041-9456-8d65e5be2179"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

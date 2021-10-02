@@ -6,4 +6,4 @@ conducted at the [Polish-Japanese Academy of Information Technology](https://www
 Having cloned the repository you can run the application locally and access it
 via the `http://localhost:8081/api` endpoint.
 There are two entities implemented: *ExchangeRates* and *DataSources*. You can
-recreate requests using the attached Postman collection.
+recreate requests using the attached Postman collection (the _postman_collection.json_ file).
