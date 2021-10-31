@@ -37,7 +37,7 @@
 										"exchangeRates"
 									]
 								},
-								"description": "Add new description - all mandatory fields are present in the body."
+								"description": "The `multiplier` field must be 1 or greater."
 							},
 							"response": []
 						},
@@ -67,7 +67,7 @@
 										"exchangeRates"
 									]
 								},
-								"description": "Add new description - all mandatory fields are present in the body."
+								"description": "`quoteCurrency` and `baseCurrency` accept only those strings consistint of three capital letters."
 							},
 							"response": []
 						},
@@ -97,7 +97,7 @@
 										"exchangeRates"
 									]
 								},
-								"description": "ExchangeRate can't be negative or zero."
+								"description": "`exchangeRate` can't be negative or zero."
 							},
 							"response": []
 						},
@@ -127,7 +127,7 @@
 										"exchangeRates"
 									]
 								},
-								"description": "quoteCurrency is a mandatory field."
+								"description": "`quoteCurrency` is a mandatory field."
 							},
 							"response": []
 						},
@@ -157,7 +157,8 @@
 										"exchangeRates",
 										"9b52d40d-f0f2-4878-99a5-26f79090d93b"
 									]
-								}
+								},
+								"description": "`quoteCurrency` and `baseCurrency` accept only those strings consistint of three capital letters."
 							},
 							"response": []
 						}
@@ -262,7 +263,8 @@
 								"exchangeRates",
 								"4e344733-f835-4832-a01b-b929d01af28d"
 							]
-						}
+						},
+						"description": "This example is dependent on the `DataInitializer` class located in *src/main/java/edu/pja/sri/s23452/sri02/DataInitializer.java*"
 					},
 					"response": []
 				},
@@ -346,7 +348,8 @@
 										"api",
 										"dataSources"
 									]
-								}
+								},
+								"description": "Each `country` must be described with a two-capital-letter code."
 							},
 							"response": []
 						},
@@ -375,7 +378,8 @@
 										"api",
 										"dataSources"
 									]
-								}
+								},
+								"description": "The `shortName` field can be up to 10 characters."
 							},
 							"response": []
 						},
@@ -405,7 +409,8 @@
 										"dataSources",
 										"1"
 									]
-								}
+								},
+								"description": "Each `country` must be described with a two-capital-letter code."
 							},
 							"response": []
 						},
